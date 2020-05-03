@@ -29,12 +29,7 @@ class WarehouseController extends AbstractController
         $data = [];
 
         foreach ($warehouses as $warehouse) {
-            $data[] = [
-                'id' => $warehouse->getId(),
-                'name' => $warehouse->getName(),
-                'description' => $warehouse->getDescription(),
-                'address' => $warehouse->getAddress(),
-            ];
+            $data[] = $warehouse->toArray();
         }
 
         return $this->json($data, Response::HTTP_OK,   ['content-type' => 'application/json']);
