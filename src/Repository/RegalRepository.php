@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Regal;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -14,9 +15,30 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class RegalRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $manager;
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $manager)
     {
         parent::__construct($registry, Regal::class);
+        $this->manager = $manager;
+    }
+
+    /**
+     * @param array $data
+     * @return Regal
+     */
+    public function saveRegal(array $data)
+    {
+        $regal = new Regal();
+
+        $regal
+            ->setName($data['name'])
+            ->setWarehouseId($data['warehouse_id']);
+
+        $this->manager->persist($regal);
+        $this->manager->flush();
+
+        return $regal;
     }
 
     // /**

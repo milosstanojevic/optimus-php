@@ -44,15 +44,11 @@ class WarehouseController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        $name = $data['name'];
-        $description = $data['description'];
-        $address = $data['address'];
-
         if (empty($name)) {
             throw new NotFoundHttpException('Expecting mandatory parameters!');
         }
 
-        $warehouse = $this->warehouseRepository->saveWarehouse($name, $description, $address);
+        $warehouse = $this->warehouseRepository->saveWarehouse($data);
 
         return new JsonResponse($warehouse->toArray(), Response::HTTP_CREATED);
     }

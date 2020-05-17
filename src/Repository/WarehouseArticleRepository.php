@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\WarehouseArticle;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -14,9 +15,57 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class WarehouseArticleRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $manager;
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $manager)
     {
         parent::__construct($registry, WarehouseArticle::class);
+        $this->manager = $manager;
+    }
+
+    /**
+     * @param array $data
+     * @return WarehouseArticle
+     */
+    public function saveWarehouseArticle(array $data)
+    {
+        $warehouse_article = new WarehouseArticle();
+
+        $found = $this->findOneBy([
+           'warehouse_id' => $data['warehouse_id'],
+           'article_id' => $data['article_id'],
+           'regal_id' => $data['regal_id'],
+           'regal_position_id' => $data['regal_position_id'],
+        ]);
+
+        if ($found) {
+            $found->setQuantity($found->getQuantity() + $data['quantity']);
+            return $this->updateWarehouseArticle($found);
+        }
+
+        $warehouse_article
+            ->setWarehouseId($data['warehouse_id'])
+            ->setArticleId($data['article_id'])
+            ->setRegalId($data['regal_id'])
+            ->setRegalPositionId($data['regal_position_id'])
+            ->setQuantity($data['quantity']);
+
+        $this->manager->persist($warehouse_article);
+        $this->manager->flush();
+
+        return $warehouse_article;
+    }
+
+    /**
+     * @param WarehouseArticle $warehouse_article
+     * @return WarehouseArticle
+     */
+    public function updateWarehouseArticle(WarehouseArticle $warehouse_article): WarehouseArticle
+    {
+        $this->manager->persist($warehouse_article);
+        $this->manager->flush();
+
+        return $warehouse_article;
     }
 
     // /**

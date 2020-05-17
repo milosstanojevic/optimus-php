@@ -7,30 +7,87 @@ use App\Entity\Regal;
 use App\Entity\RegalPosition;
 use App\Entity\Warehouse;
 use App\Entity\WarehouseArticle;
+use App\Repository\RegalPositionRepository;
+use App\Repository\RegalRepository;
+use App\Repository\WarehouseArticleRepository;
+use App\Repository\WarehouseRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
 class AppFixtures extends Fixture
 {
+    /**
+     * @var RegalRepository
+     */
+    private $regalRepository;
+
+    /**
+     * @var RegalPositionRepository
+     */
+    private $regalPositionRepository;
+
+    /**
+     * @var WarehouseRepository
+     */
+    private $warehouseRepository;
+
+    /**
+     * @var WarehouseArticleRepository
+     */
+    private $warehouseArticleRepository;
+
+    public function __construct(
+        RegalRepository $regalRepository,
+        RegalPositionRepository $regalPositionRepository,
+        WarehouseRepository $warehouseRepository,
+        WarehouseArticleRepository $warehouseArticleRepository
+    )
+    {
+        $this->regalRepository = $regalRepository;
+        $this->regalPositionRepository = $regalPositionRepository;
+        $this->warehouseRepository = $warehouseRepository;
+        $this->warehouseArticleRepository = $warehouseArticleRepository;
+    }
+
     public function load(ObjectManager $manager)
     {
+        ini_set('memory_limit', '512M');
+
         $warehouse_min = 1;
         $warehouse_max = 3;
         $regal_min = 1;
-        $regal_max = 50;
+        $regal_max = rand(5, 35);
         $regal_position_min = 1;
-        $regal_position_max = 500;
+        $regal_position_max = rand(7, 40);
         $article_min = 1;
-        $article_max = 100;
+        $article_max = 500;
         $warehouse_articles_min = 1;
-        $warehouse_articles_max = 5000;
+        $warehouse_articles_max = rand(5, 80);
 
-        for ($i = $warehouse_min; $i <= $warehouse_max; $i++) {
-            $warehouse = new Warehouse();
-            $warehouse->setName("Warehouse $i");
-            $warehouse->setDescription("Warehouse desc $i");
-            $warehouse->setAddress("address $i");
-            $manager->persist($warehouse);
+        for ($warehouseId = $warehouse_min; $warehouseId <= $warehouse_max; $warehouseId++) {
+            $data = [
+                'name' => "Warehouse $warehouseId",
+                'description' => "Warehouse desc $warehouseId",
+                'address' => "address $warehouseId",
+            ];
+
+            $this->warehouseRepository->saveWarehouse($data);
+            for ($regalId = $regal_min; $regalId <= $regal_max; $regalId++) {
+                $this->regalRepository->saveRegal([
+                    'name' => "Regal $regalId",
+                    'warehouse_id' => $warehouseId,
+                ]);
+
+                for ($i = $regal_position_min; $i <= $regal_position_max; $i++) {
+                    $regal_position = new RegalPosition();
+                    $regal_position->setName("Position $i");
+                    $regal_position->setRegalId(rand($regal_min, $regal_max));
+                    $this->regalPositionRepository->saveRegalPosition([
+                        'name' => "Position $i",
+                        'regal_id' => $regalId,
+                    ]);
+                }
+            }
         }
 
         for ($i = $article_min; $i <= $article_max; $i++) {
@@ -42,29 +99,28 @@ class AppFixtures extends Fixture
             $manager->persist($article);
         }
 
-        for ($i = $regal_min; $i <= $regal_max; $i++) {
-            $warehouse_id = rand($warehouse_min, $warehouse_max);
-            $regal = new Regal();
-            $regal->setName("Regal $i");
-            $regal->setWarehouseId($warehouse_id);
-            $manager->persist($regal);
-        }
+        $warehouses = $this->warehouseRepository->findAll();
 
-        for ($i = $regal_position_min; $i <= $regal_position_max; $i++) {
-            $regal_position = new RegalPosition();
-            $regal_position->setName("Position $i");
-            $regal_position->setRegalId(rand($regal_min, $regal_max));
-            $manager->persist($regal_position);
-        }
-
-        for ($i = $warehouse_articles_min; $i <= $warehouse_articles_max; $i++) {
-            $warehouseArticle = new WarehouseArticle();
-            $warehouseArticle->setWarehouseId(rand($warehouse_min, $warehouse_max));
-            $warehouseArticle->setArticleId(rand($article_min, $article_max));
-            $warehouseArticle->setRegalId(rand($regal_min, $regal_max));
-            $warehouseArticle->setRegalPositionId(rand($regal_position_min, $regal_position_max));
-            $warehouseArticle->setQuantity(rand(100, 5000));
-            $manager->persist($warehouseArticle);
+        foreach ($warehouses as $warehouse) {
+            $warehouseId = $warehouse->getId();
+            $regals = $this->regalRepository->findBy(['warehouse_id' => $warehouseId]);
+            foreach ($regals as $regal) {
+                $regalPositions = $this->regalPositionRepository->findBy(['regal_id' => $regal->getId()]);
+                foreach ($regalPositions as $regalPosition) {
+                    for ($i = $warehouse_articles_min; $i <= $warehouse_articles_max; $i++) {
+                        $articleId = $i + $regalPosition->getId();
+                        if ($article_min <= $articleId && $articleId <= $article_max) {
+                            $warehouseArticle = new WarehouseArticle();
+                            $warehouseArticle->setWarehouseId($warehouseId);
+                            $warehouseArticle->setArticleId($articleId);
+                            $warehouseArticle->setRegalId($regalPosition->getRegalId());
+                            $warehouseArticle->setRegalPositionId($regalPosition->getId());
+                            $warehouseArticle->setQuantity(rand(100, 5000));
+                            $manager->persist($warehouseArticle);
+                        }
+                    }
+                }
+            }
         }
 
         $manager->flush();

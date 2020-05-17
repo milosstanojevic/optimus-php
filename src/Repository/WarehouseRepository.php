@@ -24,19 +24,17 @@ class WarehouseRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param $name
-     * @param $description
-     * @param $address
+     * @param array $data
      * @return Warehouse
      */
-    public function saveWarehouse($name, $description, $address)
+    public function saveWarehouse(array $data)
     {
         $warehouse = new Warehouse();
 
         $warehouse
-            ->setName($name)
-            ->setDescription($description)
-            ->setAddress($address);
+            ->setName($data['name'])
+            ->setDescription($data['description'])
+            ->setAddress($data['address']);
 
         $this->manager->persist($warehouse);
         $this->manager->flush();
