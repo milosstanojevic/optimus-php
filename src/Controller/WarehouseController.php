@@ -9,15 +9,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class WarehouseController extends AbstractController
 {
-    private $warehouseRepository;
+    private $warehouse_repository;
 
-    public function __construct(WarehouseRepository $warehouseRepository)
+    public function __construct(WarehouseRepository $warehouse_repository)
     {
-        $this->warehouseRepository = $warehouseRepository;
+        $this->warehouse_repository = $warehouse_repository;
     }
 
     /**
@@ -25,18 +26,18 @@ class WarehouseController extends AbstractController
      */
     public function getAll(): JsonResponse
     {
-        $warehouses = $this->warehouseRepository->findAll();
+        $warehouses = $this->warehouse_repository->findAll();
         $data = [];
 
         foreach ($warehouses as $warehouse) {
             $data[] = $warehouse->toArray();
         }
 
-        return $this->json($data, Response::HTTP_OK,   ['content-type' => 'application/json']);
+        return $this->json($data, Response::HTTP_OK);
     }
 
     /**
-     * @Route("/warehouses", name="add_warehouses", methods={"POST"})
+     * @Route("/warehouses", name="add_warehouse", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
      */
@@ -44,13 +45,13 @@ class WarehouseController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if (empty($name)) {
-            throw new NotFoundHttpException('Expecting mandatory parameters!');
+        if (empty($data) && !array_key_exists('name', $data)) {
+            throw new UnprocessableEntityHttpException('Name required');
         }
 
-        $warehouse = $this->warehouseRepository->saveWarehouse($data);
+        $warehouse = $this->warehouse_repository->saveWarehouse($data);
 
-        return new JsonResponse($warehouse->toArray(), Response::HTTP_CREATED);
+        return $this->json($warehouse->toArray(), Response::HTTP_CREATED);
     }
 
     /**
@@ -62,7 +63,7 @@ class WarehouseController extends AbstractController
     public function update($id, Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $warehouse = $this->warehouseRepository->findOneBy(['id' => $id]);
+        $warehouse = $this->warehouse_repository->findOneBy(['id' => $id]);
 
         if (!$warehouse) {
             throw new NotFoundHttpException('Warehouse not found.');
@@ -72,9 +73,9 @@ class WarehouseController extends AbstractController
         empty($data['description']) ? true : $warehouse->setDescription($data['description']);
         empty($data['address']) ? true : $warehouse->setAddress($data['address']);
 
-        $updatedWarehouse = $this->warehouseRepository->updateWarehouse($warehouse);
+        $updatedWarehouse = $this->warehouse_repository->updateWarehouse($warehouse);
 
-        return new JsonResponse($updatedWarehouse->toArray(), Response::HTTP_OK);
+        return $this->json($updatedWarehouse->toArray(), Response::HTTP_OK);
     }
 
     /**
@@ -84,13 +85,13 @@ class WarehouseController extends AbstractController
      */
     public function getWarehouse($id): JsonResponse
     {
-        $warehouse = $this->warehouseRepository->findOneBy(['id' => $id]);
+        $warehouse = $this->warehouse_repository->findOneBy(['id' => $id]);
 
         if (!$warehouse) {
             throw new NotFoundHttpException('Warehouse not found.');
         }
 
-        return new JsonResponse($warehouse->toArray(), Response::HTTP_OK);
+        return $this->json($warehouse->toArray(), Response::HTTP_OK);
     }
 
     /**
@@ -100,14 +101,14 @@ class WarehouseController extends AbstractController
      */
     public function delete($id): JsonResponse
     {
-        $warehouse = $this->warehouseRepository->findOneBy(['id' => $id]);
+        $warehouse = $this->warehouse_repository->findOneBy(['id' => $id]);
 
         if (!$warehouse) {
             throw new NotFoundHttpException('Warehouse not found.');
         }
 
-        $this->warehouseRepository->removeWarehouse($warehouse);
+        $this->warehouse_repository->removeWarehouse($warehouse);
 
-        return new JsonResponse(['status' => 'Warehouse deleted'], Response::HTTP_NO_CONTENT);
+        return $this->json(['status' => 'Warehouse deleted'], Response::HTTP_NO_CONTENT);
     }
 }

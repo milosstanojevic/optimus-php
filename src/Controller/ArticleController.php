@@ -9,15 +9,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
 {
-    private $articleRepository;
+    private $article_repository;
 
-    public function __construct(ArticleRepository $articleRepository)
+    public function __construct(ArticleRepository $article_repository)
     {
-        $this->articleRepository = $articleRepository;
+        $this->article_repository = $article_repository;
     }
 
     /**
@@ -25,13 +26,72 @@ class ArticleController extends AbstractController
      */
     public function getAll(): JsonResponse
     {
-        $articles = $this->articleRepository->findAll();
+        $articles = $this->article_repository->findAll();
         $data = [];
 
         foreach ($articles as $article) {
             $data[] = $article->toArray();
         }
 
-        return $this->json($data, Response::HTTP_OK,   ['content-type' => 'application/json']);
+        return $this->json($data, Response::HTTP_OK);
+    }
+
+    /**
+     * @Route("/articles", name="add_article", methods={"POST"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function add(Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (empty($data) && !array_key_exists('name', $data)) {
+            throw new UnprocessableEntityHttpException('Name required');
+        }
+
+        $article = $this->article_repository->saveArticle($data);
+
+        return $this->json($article->toArray(), Response::HTTP_CREATED);
+    }
+
+    /**
+     * @Route("/articles/{id}", name="update_article", methods={"PUT"})
+     * @param  int $id
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function update($id, Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $article = $this->article_repository->findOneBy(['id' => $id]);
+
+        if (!$article) {
+            throw new NotFoundHttpException('Article not found.');
+        }
+
+        empty($data['name']) ? true : $article->setName($data['name']);
+        empty($data['description']) ? true : $article->setDescription($data['description']);
+        empty($data['bar_code']) ? true : $article->setBarcode($data['bar_code']);
+        empty($data['unit']) ? true : $article->setUnit($data['unit']);
+
+        $updated_article = $this->article_repository->updateArticle($article);
+
+        return $this->json($updated_article->toArray(), Response::HTTP_OK);
+    }
+
+    /**
+     * @Route("/article/{id}", name="get_one_article", methods={"GET"})
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function getArticle($id): JsonResponse
+    {
+        $warehouse = $this->article_repository->findOneBy(['id' => $id]);
+
+        if (!$warehouse) {
+            throw new NotFoundHttpException('Article not found.');
+        }
+
+        return $this->json($warehouse->toArray(), Response::HTTP_OK);
     }
 }

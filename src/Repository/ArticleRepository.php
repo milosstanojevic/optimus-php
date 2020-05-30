@@ -43,6 +43,18 @@ class ArticleRepository extends ServiceEntityRepository
         return $article;
     }
 
+    /**
+     * @param Article $article
+     * @return Article
+     */
+    public function updateArticle(Article $article): Article
+    {
+        $this->manager->persist($article);
+        $this->manager->flush();
+
+        return $article;
+    }
+
     // /**
     //  * @return Article[] Returns an array of Article objects
     //  */
