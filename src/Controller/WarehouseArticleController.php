@@ -103,7 +103,13 @@ class WarehouseArticleController extends AbstractController
             throw new UnprocessableEntityHttpException('Article required');
         }
 
-        $article = $this->warehouse_article_repository->saveWarehouseArticle($data);
+        $article = $this->warehouse_article_repository->saveWarehouseArticle([
+            'warehouse_id' => $id,
+            'article_id' => $data['article_id'],
+            'regal_id' => $data['regal_id'],
+            'regal_position_id' => $data['regal_position_id'],
+            'quantity' => $data['quantity'],
+        ]);
 
         return $this->json($article->toArray(), Response::HTTP_CREATED);
     }
