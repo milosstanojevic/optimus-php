@@ -54,7 +54,7 @@ class TransportController extends AbstractController
     }
 
     /**
-     * @Route("/tronsport-route/{id}", name="update_transport_route", methods={"PUT"})
+     * @Route("/transport-routes/{id}", name="update_transport_route", methods={"PUT"})
      * @param  int $id
      * @param Request $request
      * @return JsonResponse
@@ -77,7 +77,7 @@ class TransportController extends AbstractController
     }
 
     /**
-     * @Route("/transport-route/{id}", name="get_one_transport_route", methods={"GET"})
+     * @Route("/transport-routes/{id}", name="get_one_transport_route", methods={"GET"})
      * @param int $id
      * @return JsonResponse
      */
