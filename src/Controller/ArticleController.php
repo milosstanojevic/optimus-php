@@ -80,7 +80,7 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * @Route("/article/{id}", name="get_one_article", methods={"GET"})
+     * @Route("/articles/{id}", name="get_one_article", methods={"GET"})
      * @param int $id
      * @return JsonResponse
      */
