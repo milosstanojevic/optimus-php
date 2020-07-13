@@ -55,4 +55,13 @@ class TransportDestination
 
         return $this;
     }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'transport_id' => $this->getTransportId(),
+            'warehouse_id' => $this->getWarehouseId(),
+        ];
+    }
 }

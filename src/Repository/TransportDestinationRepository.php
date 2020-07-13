@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\TransportDestination;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -14,9 +15,25 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TransportDestinationRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $manager;
+
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $manager)
     {
         parent::__construct($registry, TransportDestination::class);
+        $this->manager = $manager;
+    }
+
+    public function saveTransportDestination(array $data) {
+        $destination = new TransportDestination();
+
+        $destination
+            ->setWarehouseId($data['warehouse_id'])
+            ->setTransportId($data['transport_id']);
+
+        $this->manager->persist($destination);
+        $this->manager->flush();
+
+        return $destination;
     }
 
     // /**
