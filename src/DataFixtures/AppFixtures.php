@@ -54,7 +54,7 @@ class AppFixtures extends Fixture
         ini_set('memory_limit', '512M');
 
         $warehouse_min = 1;
-        $warehouse_max = 3;
+        $warehouse_max = 1;
         $regal_min = 1;
         $regal_max = rand(5, 35);
         $regal_position_min = 1;

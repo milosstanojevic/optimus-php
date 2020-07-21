@@ -50,20 +50,20 @@ class TransportDestinationController extends AbstractController
     }
 
     /**
-     * @Route("/transport-route/{transportId}/destination/{id}", name="get_transport_destination")
-     * @param int $transport_id
+     * @Route("/transport-route/{id}/destination/{destination_id}", name="get_transport_destination", methods={"GET"})
      * @param int $id
+     * @param int $destination_id
      * @return JsonResponse
      */
-    public function getDestination(int $transport_id, int $id)
+    public function getDestination(int $id, int $destination_id)
     {
-        $transport = $this->transport_route_repository->findOneBy(['id' => $transport_id]);
+        $transport = $this->transport_route_repository->findOneBy(['id' => $id]);
 
         if (!$transport) {
             throw new NotFoundHttpException('Transport not found.');
         }
 
-        $destination = $this->transport_destination_repository->findOneBy(['id' => $id]);
+        $destination = $this->transport_destination_repository->findOneBy(['id' => $destination_id]);
 
         if (!$destination) {
             throw new NotFoundHttpException('Destination not found.');
@@ -92,7 +92,7 @@ class TransportDestinationController extends AbstractController
         if (
             empty($data) || !array_key_exists('warehouse_id', $data)
         ) {
-            throw new UnprocessableEntityHttpException('Transport and warehouse required');
+            throw new UnprocessableEntityHttpException('Warehouse id required');
         }
 
         $regal_position = $this->transport_destination_repository->saveTransportDestination([

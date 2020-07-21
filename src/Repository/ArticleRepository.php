@@ -45,10 +45,16 @@ class ArticleRepository extends ServiceEntityRepository
 
     /**
      * @param Article $article
+     * @param array   $data
      * @return Article
      */
-    public function updateArticle(Article $article): Article
+    public function updateArticle(Article $article, array $data): Article
     {
+        empty($data['name']) ? true : $article->setName($data['name']);
+        empty($data['description']) ? true : $article->setDescription($data['description']);
+        empty($data['bar_code']) ? true : $article->setBarcode($data['bar_code']);
+        empty($data['unit']) ? true : $article->setUnit($data['unit']);
+
         $this->manager->persist($article);
         $this->manager->flush();
 

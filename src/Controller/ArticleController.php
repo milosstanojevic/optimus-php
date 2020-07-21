@@ -62,19 +62,13 @@ class ArticleController extends AbstractController
      */
     public function update($id, Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
         $article = $this->article_repository->findOneBy(['id' => $id]);
 
         if (!$article) {
             throw new NotFoundHttpException('Article not found.');
         }
 
-        empty($data['name']) ? true : $article->setName($data['name']);
-        empty($data['description']) ? true : $article->setDescription($data['description']);
-        empty($data['bar_code']) ? true : $article->setBarcode($data['bar_code']);
-        empty($data['unit']) ? true : $article->setUnit($data['unit']);
-
-        $updated_article = $this->article_repository->updateArticle($article);
+        $updated_article = $this->article_repository->updateArticle($article, json_decode($request->getContent(), true));
 
         return $this->json($updated_article->toArray(), Response::HTTP_OK);
     }

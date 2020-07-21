@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controller;
 
 use App\Repository\WarehouseArticleRepository;
@@ -35,11 +34,29 @@ class WarehouseArticleController extends AbstractController
     }
 
     /**
+     * @Route("/warehouse-articles", name="get_all_warehouse_articles", methods={"GET"})
+     * @return JsonResponse
+     */
+    public function getAllWarehouseArticles(): JsonResponse
+    {
+
+        $warehouseArticles = $this->warehouse_article_repository->findAll();
+
+        $data = [];
+
+        foreach ($warehouseArticles as $warehouseArticle) {
+            $data[] = $warehouseArticle->toArray();
+        }
+
+        return $this->json($data, Response::HTTP_OK);
+    }
+
+    /**
      * @Route("/warehouses/{id}/articles", name="get_warehouse_articles", methods={"GET"})
      * @param int $id
      * @return JsonResponse
      */
-    public function getWarehouseArticles($id): JsonResponse
+    public function getWarehouseArticles(int $id): JsonResponse
     {
         $warehouse = $this->warehouse_repository->findOneBy(['id' => $id]);
 
@@ -64,7 +81,7 @@ class WarehouseArticleController extends AbstractController
      * @param int $regalId
      * @return JsonResponse
      */
-    public function getWarehouseRegalArticles($id, $regalId): JsonResponse
+    public function getWarehouseRegalArticles(int $id, int $regalId): JsonResponse
     {
         $warehouse = $this->warehouse_repository->findOneBy(['id' => $id]);
 
@@ -89,7 +106,7 @@ class WarehouseArticleController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function saveWarehouseArticle($id, Request $request): JsonResponse
+    public function saveWarehouseArticle(int $id, Request $request): JsonResponse
     {
         $warehouse = $this->warehouse_repository->findOneBy(['id' => $id]);
 

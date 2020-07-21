@@ -24,6 +24,29 @@ class WarehouseArticleRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param int $article_id
+     * @return array
+     */
+    public function getWarehouseIdsByArticleId(int $article_id)
+    {
+        $data = [];
+        $query = $this
+            ->createQueryBuilder('w')
+            ->andWhere('w.article_id = :val')
+            ->setParameter('val', $article_id)
+            ->select('w.warehouse_id')
+            ->distinct()
+            ->getQuery()
+            ->getResult();
+
+        foreach ($query as $item) {
+            $data[] = $item['warehouse_id'];
+        }
+
+        return $data;
+    }
+
+    /**
      * @param array $data
      * @return WarehouseArticle
      */

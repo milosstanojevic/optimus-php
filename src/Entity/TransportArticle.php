@@ -28,12 +28,12 @@ class TransportArticle
     private $article_id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $warehouse_id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $quantity;
 
@@ -41,6 +41,16 @@ class TransportArticle
      * @ORM\Column(type="integer")
      */
     private $destination_id;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $regal_id;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $regal_position_id;
 
     public function getId(): ?int
     {
@@ -76,7 +86,7 @@ class TransportArticle
         return $this->warehouse_id;
     }
 
-    public function setWarehouseId(int $warehouse_id): self
+    public function setWarehouseId(?int $warehouse_id): self
     {
         $this->warehouse_id = $warehouse_id;
 
@@ -88,7 +98,7 @@ class TransportArticle
         return $this->quantity;
     }
 
-    public function setQuantity(int $quantity): self
+    public function setQuantity(?int $quantity): self
     {
         $this->quantity = $quantity;
 
@@ -105,5 +115,43 @@ class TransportArticle
         $this->destination_id = $destination_id;
 
         return $this;
+    }
+
+    public function getRegalId(): ?int
+    {
+        return $this->regal_id;
+    }
+
+    public function setRegalId(?int $regal_id): self
+    {
+        $this->regal_id = $regal_id;
+
+        return $this;
+    }
+
+    public function getRegalPositionId(): ?int
+    {
+        return $this->regal_position_id;
+    }
+
+    public function setRegalPositionId(?int $regal_position_id): self
+    {
+        $this->regal_position_id = $regal_position_id;
+
+        return $this;
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'transport_id' => $this->getTransportId(),
+            'article_id' => $this->getArticleId(),
+            'warehouse_id' => $this->getWarehouseId(),
+            'regal_id' => $this->getRegalId(),
+            'regal_position_id' => $this->getRegalPositionId(),
+            'destination_id' => $this->getDestinationId(),
+            'quantity' => $this->getQuantity(),
+        ];
     }
 }
