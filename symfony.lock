@@ -96,6 +96,9 @@
     "doctrine/sql-formatter": {
         "version": "1.1.0"
     },
+    "laminas/laminas-zendframework-bridge": {
+        "version": "1.1.0"
+    },
     "nelmio/cors-bundle": {
         "version": "1.5",
         "recipe": {
@@ -118,7 +121,7 @@
         "version": "2.2.3"
     },
     "php": {
-        "version": "7.3"
+        "version": "7.4"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -246,6 +249,9 @@
     "symfony/polyfill-intl-idn": {
         "version": "v1.17.1"
     },
+    "symfony/polyfill-intl-normalizer": {
+        "version": "v1.18.1"
+    },
     "symfony/polyfill-mbstring": {
         "version": "v1.17.1"
     },
@@ -283,6 +289,9 @@
     },
     "symfony/yaml": {
         "version": "v5.0.10"
+    },
+    "webimpress/safe-writer": {
+        "version": "2.0.1"
     },
     "zendframework/zend-code": {
         "version": "3.4.1"
