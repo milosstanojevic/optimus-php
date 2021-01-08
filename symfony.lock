@@ -90,9 +90,6 @@
     "doctrine/persistence": {
         "version": "1.3.7"
     },
-    "doctrine/reflection": {
-        "version": "1.2.1"
-    },
     "doctrine/sql-formatter": {
         "version": "1.1.0"
     },
@@ -171,6 +168,9 @@
     },
     "symfony/dependency-injection": {
         "version": "v5.0.10"
+    },
+    "symfony/deprecation-contracts": {
+        "version": "v2.2.0"
     },
     "symfony/doctrine-bridge": {
         "version": "v5.0.10"
@@ -289,9 +289,6 @@
     },
     "symfony/yaml": {
         "version": "v5.0.10"
-    },
-    "webimpress/safe-writer": {
-        "version": "2.0.1"
     },
     "zendframework/zend-code": {
         "version": "3.4.1"
