@@ -61,6 +61,12 @@ class ArticleRepository extends ServiceEntityRepository
         return $article;
     }
 
+    public function deleteArticle(Article $article):void
+    {
+        $this->manager->remove($article);
+        $this->manager->flush();
+    }
+
     // /**
     //  * @return Article[] Returns an array of Article objects
     //  */

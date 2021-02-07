@@ -80,12 +80,30 @@ class ArticleController extends AbstractController
      */
     public function getArticle($id): JsonResponse
     {
-        $warehouse = $this->article_repository->findOneBy(['id' => $id]);
+        $article = $this->article_repository->findOneBy(['id' => $id]);
 
-        if (!$warehouse) {
+        if (!$article) {
             throw new NotFoundHttpException('Article not found.');
         }
 
-        return $this->json($warehouse->toArray(), Response::HTTP_OK);
+        return $this->json($article->toArray(), Response::HTTP_OK);
+    }
+
+    /**
+     * @Route("/articles/{id}", name="delete_article", methods={"DELETE"})
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function deleteArticle($id): JsonResponse
+    {
+        $article = $this->article_repository->findOneBy(['id' => $id]);
+
+        if (!$article) {
+            throw new NotFoundHttpException('Article not found.');
+        }
+
+        $this->article_repository->deleteArticle($article);
+
+        return $this->json([], Response::HTTP_OK);
     }
 }
