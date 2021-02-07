@@ -11,6 +11,7 @@ use App\Repository\RegalPositionRepository;
 use App\Repository\RegalRepository;
 use App\Repository\WarehouseArticleRepository;
 use App\Repository\WarehouseRepository;
+use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -91,11 +92,14 @@ class AppFixtures extends Fixture
         }
 
         for ($i = $article_min; $i <= $article_max; $i++) {
+            $d = new DateTime();
             $article = new Article();
             $article->setName("Article $i");
             $article->setDescription("Description $i");
             $article->setBarcode(rand(100000, 999999));
             $article->setUnit('Kg');
+            $article->setCreatedAt($d->setTimestamp($d->getTimestamp() + $i));
+            $article->setUpdatedAt($d->setTimestamp($d->getTimestamp() + $i));
             $manager->persist($article);
         }
 
