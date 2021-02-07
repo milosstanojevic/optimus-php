@@ -27,7 +27,7 @@ class WarehouseRepository extends ServiceEntityRepository
      * @param array $data
      * @return Warehouse
      */
-    public function saveWarehouse(array $data)
+    public function saveWarehouse(array $data): Warehouse
     {
         $warehouse = new Warehouse();
 

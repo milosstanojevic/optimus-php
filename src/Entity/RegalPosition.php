@@ -3,12 +3,17 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Blameable\Traits\BlameableEntity;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RegalPositionRepository")
  */
 class RegalPosition
 {
+    use TimestampableEntity;
+    use BlameableEntity;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -55,12 +60,16 @@ class RegalPosition
         return $this;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
             'regal_id' => $this->getRegalId(),
+            'created_by' => $this->getCreatedBy(),
+            'updated_by' => $this->getUpdatedBy(),
+            'created_at' => $this->getCreatedAt()->getTimestamp(),
+            'updated_at' => $this->getUpdatedAt()->getTimestamp(),
         ];
     }
 }

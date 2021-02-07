@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\Blameable\Traits\BlameableEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class WarehouseArticle
 {
+    use TimestampableEntity;
+    use BlameableEntity;
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -106,7 +110,7 @@ class WarehouseArticle
         return $this;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->getId(),
@@ -115,6 +119,10 @@ class WarehouseArticle
             'regal_id' => $this->getRegalId(),
             'regal_position_id' => $this->getRegalPositionId(),
             'quantity' => $this->getQuantity(),
+            'created_by' => $this->getCreatedBy(),
+            'updated_by' => $this->getUpdatedBy(),
+            'created_at' => $this->getCreatedAt()->getTimestamp(),
+            'updated_at' => $this->getUpdatedAt()->getTimestamp(),
         ];
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Blameable\Traits\BlameableEntity;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use InvalidArgumentException;
 
 /**
@@ -10,6 +12,9 @@ use InvalidArgumentException;
  */
 class Article
 {
+    use TimestampableEntity;
+    use BlameableEntity;
+
     const UNIT_KG = 'Kg';
     const UNIT_T = 'T';
     const UNIT_GR = 'gr';
@@ -104,7 +109,7 @@ class Article
         return $this;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->getId(),
@@ -112,6 +117,10 @@ class Article
             'description' => $this->getDescription(),
             'bar_code' => $this->getBarcode(),
             'unit' => $this->getUnit(),
+            'created_by' => $this->getCreatedBy(),
+            'updated_by' => $this->getUpdatedBy(),
+            'created_at' => $this->getCreatedAt()->getTimestamp(),
+            'updated_at' => $this->getUpdatedAt()->getTimestamp(),
         ];
     }
 }

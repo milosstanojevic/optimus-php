@@ -4,12 +4,17 @@ namespace App\Entity;
 
 use App\Repository\TransportArticleRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Blameable\Traits\BlameableEntity;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity(repositoryClass=TransportArticleRepository::class)
  */
 class TransportArticle
 {
+    use TimestampableEntity;
+    use BlameableEntity;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -141,7 +146,7 @@ class TransportArticle
         return $this;
     }
 
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->getId(),
@@ -152,6 +157,10 @@ class TransportArticle
             'regal_position_id' => $this->getRegalPositionId(),
             'destination_id' => $this->getDestinationId(),
             'quantity' => $this->getQuantity(),
+            'created_by' => $this->getCreatedBy(),
+            'updated_by' => $this->getUpdatedBy(),
+            'created_at' => $this->getCreatedAt()->getTimestamp(),
+            'updated_at' => $this->getUpdatedAt()->getTimestamp(),
         ];
     }
 }
