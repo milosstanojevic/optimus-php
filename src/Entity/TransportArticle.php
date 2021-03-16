@@ -43,11 +43,6 @@ class TransportArticle
     private $quantity;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $destination_id;
-
-    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private $regal_id;
@@ -110,18 +105,6 @@ class TransportArticle
         return $this;
     }
 
-    public function getDestinationId(): ?int
-    {
-        return $this->destination_id;
-    }
-
-    public function setDestinationId(int $destination_id): self
-    {
-        $this->destination_id = $destination_id;
-
-        return $this;
-    }
-
     public function getRegalId(): ?int
     {
         return $this->regal_id;
@@ -155,7 +138,6 @@ class TransportArticle
             'warehouse_id' => $this->getWarehouseId(),
             'regal_id' => $this->getRegalId(),
             'regal_position_id' => $this->getRegalPositionId(),
-            'destination_id' => $this->getDestinationId(),
             'quantity' => $this->getQuantity(),
             'created_by' => $this->getCreatedBy(),
             'updated_by' => $this->getUpdatedBy(),

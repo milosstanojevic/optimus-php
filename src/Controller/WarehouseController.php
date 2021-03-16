@@ -60,7 +60,7 @@ class WarehouseController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function update($id, Request $request): JsonResponse
+    public function update(int $id, Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
         $warehouse = $this->warehouse_repository->findOneBy(['id' => $id]);
@@ -83,7 +83,7 @@ class WarehouseController extends AbstractController
      * @param int $id
      * @return JsonResponse
      */
-    public function getWarehouse($id): JsonResponse
+    public function getWarehouse(int $id): JsonResponse
     {
         $warehouse = $this->warehouse_repository->findOneBy(['id' => $id]);
 
@@ -99,7 +99,7 @@ class WarehouseController extends AbstractController
      * @param int $id
      * @return JsonResponse
      */
-    public function delete($id): JsonResponse
+    public function delete(int $id): JsonResponse
     {
         $warehouse = $this->warehouse_repository->findOneBy(['id' => $id]);
 

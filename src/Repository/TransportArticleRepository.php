@@ -30,16 +30,15 @@ class TransportArticleRepository extends ServiceEntityRepository
 
     /**
      * @param int $transport_id
-     * @param int $destination_id
+     * @param int $warehouse_id
      * @return TransportArticle[] Returns an array of TransportArticle objects
      */
-    public function findArticlesByTransportAndDestinationId(int $transport_id, int $destination_id)
+    public function findArticlesByTransportAndWarehouseId(int $transport_id, int $warehouse_id)
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.transport_id = :transport')
-            ->andWhere('t.destination_id = :destination')
-            ->orWhere('t.warehouse_id = :destination')
-            ->setParameter('destination', $destination_id)
+            ->andWhere('t.warehouse_id = :warehouse')
+            ->setParameter('warehouse', $warehouse_id)
             ->setParameter('transport', $transport_id)
             ->orderBy('t.id', 'ASC')
             ->getQuery()
@@ -102,7 +101,6 @@ class TransportArticleRepository extends ServiceEntityRepository
     private function dataSetter(TransportArticle $transport_article, array $data)
     {
         !array_key_exists('transport_id', $data) ? true : $transport_article->setTransportId($data['transport_id']);
-        !array_key_exists('destination_id', $data) ? true : $transport_article->setDestinationId($data['destination_id']);
         !array_key_exists('article_id', $data) ? true : $transport_article->setArticleId($data['article_id']);
         !array_key_exists('warehouse_id', $data) ? true : $transport_article->setWarehouseId($data['warehouse_id']);
         !array_key_exists('regal_id', $data) ? true : $transport_article->setRegalId($data['regal_id']);

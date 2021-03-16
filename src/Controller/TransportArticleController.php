@@ -51,7 +51,8 @@ class TransportArticleController extends AbstractController
         }
 
         $transport_articles = $this->transport_article_repository
-            ->findArticlesByTransportAndDestinationId($id, $destination_id);
+            ->findArticlesByTransportAndWarehouseId($id, $destination_id);
+
         $data = [];
 
         foreach ($transport_articles as $transport_article) {
@@ -93,7 +94,7 @@ class TransportArticleController extends AbstractController
 
         $article = $this->transport_article_repository
             ->saveTransportArticle(
-                array_merge($data, ['transport_id' => $id, 'destination_id' => $destination_id])
+                array_merge($data, ['transport_id' => $id, 'warehouse_id' => $destination_id])
             );
 
         return $this->json($article->toArray(), Response::HTTP_CREATED);
@@ -169,7 +170,7 @@ class TransportArticleController extends AbstractController
         $updated_transport_article = $this->transport_article_repository
             ->updateTransportArticle(
                 $transport_article,
-                array_merge($data, ['transport_id' => $id, 'destination_id' => $destination_id])
+                array_merge($data, ['transport_id' => $id, 'warehouse_id' => $destination_id])
             );
 
         return $this->json($updated_transport_article->toArray(), Response::HTTP_OK);
