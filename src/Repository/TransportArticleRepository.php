@@ -33,7 +33,7 @@ class TransportArticleRepository extends ServiceEntityRepository
      * @param int $warehouse_id
      * @return TransportArticle[] Returns an array of TransportArticle objects
      */
-    public function findArticlesByTransportAndWarehouseId(int $transport_id, int $warehouse_id)
+    public function findArticlesByTransportAndWarehouseId(int $transport_id, int $warehouse_id): array
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.transport_id = :transport')
@@ -50,7 +50,7 @@ class TransportArticleRepository extends ServiceEntityRepository
      * @param array $data
      * @return TransportArticle
      */
-    public function saveTransportArticle(array $data)
+    public function saveTransportArticle(array $data): TransportArticle
     {
         $transport_article = new TransportArticle();
 
@@ -74,7 +74,7 @@ class TransportArticleRepository extends ServiceEntityRepository
     /**
      * @param TransportArticle $transport_article
      */
-    public function deleteTransportArticle(TransportArticle $transport_article)
+    public function deleteTransportArticle(TransportArticle $transport_article): void
     {
         $this->manager->remove($transport_article);
         $this->manager->flush();
@@ -85,7 +85,7 @@ class TransportArticleRepository extends ServiceEntityRepository
      * @param array            $data
      * @return TransportArticle
      */
-    public function updateTransportArticle(TransportArticle $transport_article, array $data)
+    public function updateTransportArticle(TransportArticle $transport_article, array $data): TransportArticle
     {
         $this->dataSetter($transport_article, $data);
         $this->manager->persist($transport_article);

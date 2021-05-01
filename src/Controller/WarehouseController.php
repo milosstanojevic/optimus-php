@@ -62,18 +62,15 @@ class WarehouseController extends AbstractController
      */
     public function update(int $id, Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
         $warehouse = $this->warehouse_repository->findOneBy(['id' => $id]);
 
         if (!$warehouse) {
             throw new NotFoundHttpException('Warehouse not found.');
         }
 
-        empty($data['name']) ? true : $warehouse->setName($data['name']);
-        empty($data['description']) ? true : $warehouse->setDescription($data['description']);
-        empty($data['address']) ? true : $warehouse->setAddress($data['address']);
+        $data = json_decode($request->getContent(), true);
 
-        $updatedWarehouse = $this->warehouse_repository->updateWarehouse($warehouse);
+        $updatedWarehouse = $this->warehouse_repository->updateWarehouse($warehouse, $data);
 
         return $this->json($updatedWarehouse->toArray(), Response::HTTP_OK);
     }

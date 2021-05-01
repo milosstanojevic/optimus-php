@@ -27,7 +27,7 @@ class TransportRouteRepository extends ServiceEntityRepository
      * @param array $data
      * @return TransportRoute
      */
-    public function saveTransportRoute(array $data)
+    public function saveTransportRoute(array $data): TransportRoute
     {
         $route = new TransportRoute();
 

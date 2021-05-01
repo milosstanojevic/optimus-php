@@ -31,7 +31,7 @@ class TransportDestinationController extends AbstractController
      * @param int $id
      * @return JsonResponse
      */
-    public function getAll(int $id)
+    public function getAll(int $id): JsonResponse
     {
         $transport = $this->transport_route_repository->findOneBy(['id' => $id]);
 
@@ -55,7 +55,7 @@ class TransportDestinationController extends AbstractController
      * @param int $destination_id
      * @return JsonResponse
      */
-    public function getDestination(int $id, int $destination_id)
+    public function getDestination(int $id, int $destination_id): JsonResponse
     {
         $transport = $this->transport_route_repository->findOneBy(['id' => $id]);
 

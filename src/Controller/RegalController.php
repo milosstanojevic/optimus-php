@@ -36,7 +36,7 @@ class RegalController extends AbstractController
      * @param int $id
      * @return JsonResponse
      */
-    public function getWarehouseRegals($id): JsonResponse
+    public function getWarehouseRegals(int $id): JsonResponse
     {
         $warehouse = $this->warehouse_repository->findOneBy(['id' => $id]);
 

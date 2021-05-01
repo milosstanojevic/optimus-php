@@ -61,18 +61,14 @@ class MerchantController extends AbstractController
      */
     public function update(int $id, Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
         $merchant = $this->merchant_repository->findOneBy(['id' => $id]);
 
         if (!$merchant) {
             throw new NotFoundHttpException('Merchant not found.');
         }
+        $data = json_decode($request->getContent(), true);
 
-        empty($data['name']) ? true : $merchant->setName($data['name']);
-        empty($data['description']) ? true : $merchant->setDescription($data['description']);
-        empty($data['address']) ? true : $merchant->setAddress($data['address']);
-
-        $updatedMerchant = $this->merchant_repository->updateMerchant($merchant);
+        $updatedMerchant = $this->merchant_repository->updateMerchant($merchant, $data);
 
         return $this->json($updatedMerchant->toArray(), Response::HTTP_OK);
     }

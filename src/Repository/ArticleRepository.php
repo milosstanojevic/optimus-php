@@ -27,15 +27,11 @@ class ArticleRepository extends ServiceEntityRepository
      * @param array $data
      * @return Article
      */
-    public function saveArticle(array $data)
+    public function saveArticle(array $data): Article
     {
         $article = new Article();
 
-        $article
-            ->setName($data['name'])
-            ->setDescription($data['description'])
-            ->setBarcode($data['bar_code'])
-            ->setUnit($data['unit']);
+        $this->attributesSetter($article, $data);
 
         $this->manager->persist($article);
         $this->manager->flush();
@@ -50,10 +46,7 @@ class ArticleRepository extends ServiceEntityRepository
      */
     public function updateArticle(Article $article, array $data): Article
     {
-        empty($data['name']) ? true : $article->setName($data['name']);
-        empty($data['description']) ? true : $article->setDescription($data['description']);
-        empty($data['bar_code']) ? true : $article->setBarcode($data['bar_code']);
-        empty($data['unit']) ? true : $article->setUnit($data['unit']);
+        $this->attributesSetter($article, $data);
 
         $this->manager->persist($article);
         $this->manager->flush();
@@ -61,10 +54,31 @@ class ArticleRepository extends ServiceEntityRepository
         return $article;
     }
 
-    public function deleteArticle(Article $article):void
+    public function deleteArticle(Article $article): void
     {
         $this->manager->remove($article);
         $this->manager->flush();
+    }
+
+    /**
+     * @param Article $article
+     * @param array $attributes
+     */
+    private function attributesSetter(Article $article, array $attributes)
+    {
+        !array_key_exists('name', $attributes)
+            ? true
+            : $article->setName($attributes['name']);
+        !array_key_exists('description', $attributes)
+            ? true
+            : $article->setDescription($attributes['description']);
+        !array_key_exists('bar_code', $attributes)
+            ? true
+            : $article->setBarcode($attributes['bar_code']);
+        !array_key_exists('unit', $attributes)
+            ? $article->setUnit('Kg')
+            : $article->setUnit($attributes['unit']);
+
     }
 
     // /**

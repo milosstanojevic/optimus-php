@@ -116,8 +116,20 @@ class WarehouseArticleController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
-        if (empty($data) && !array_key_exists('article_id', $data)) {
+        if (empty($data)) {
+            throw new UnprocessableEntityHttpException('Not allowed. Empty attributes.');
+        }
+
+        if (!array_key_exists('article_id', $data)) {
             throw new UnprocessableEntityHttpException('Article required');
+        }
+
+        if (!array_key_exists('regal_id', $data)) {
+            throw new UnprocessableEntityHttpException('Regal required');
+        }
+
+        if (!array_key_exists('regal_position_id', $data)) {
+            throw new UnprocessableEntityHttpException('Regal Position required');
         }
 
         $article = $this->warehouse_article_repository->saveWarehouseArticle([

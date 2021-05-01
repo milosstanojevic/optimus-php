@@ -37,7 +37,7 @@ class RegalPositionController extends AbstractController
      * @param int $id
      * @return JsonResponse
      */
-    public function getRegalPositions($id): JsonResponse
+    public function getRegalPositions(int $id): JsonResponse
     {
         $regal = $this->regal_repository->findOneBy(['id' => $id]);
 

@@ -23,7 +23,7 @@ class TransportDestinationRepository extends ServiceEntityRepository
         $this->manager = $manager;
     }
 
-    public function saveTransportDestination(array $data) {
+    public function saveTransportDestination(array $data): TransportDestination {
         $destination = new TransportDestination();
 
         $destination

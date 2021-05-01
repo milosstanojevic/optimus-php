@@ -24,17 +24,14 @@ class MerchantRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param array $data
+     * @param array $attributes
      * @return Merchant
      */
-    public function saveMerchant(array $data): Merchant
+    public function saveMerchant(array $attributes): Merchant
     {
         $merchant = new Merchant();
 
-        $merchant
-            ->setName($data['name'])
-            ->setDescription($data['description'])
-            ->setAddress($data['address']);
+        $this->attributesSetter($merchant, $attributes);
 
         $this->manager->persist($merchant);
         $this->manager->flush();
@@ -44,20 +41,39 @@ class MerchantRepository extends ServiceEntityRepository
 
     /**
      * @param Merchant $merchant
+     * @param array    $attributes
      * @return Merchant
      */
-    public function updateMerchant(Merchant $merchant): Merchant
+    public function updateMerchant(Merchant $merchant, array $attributes): Merchant
     {
+        $this->attributesSetter($merchant, $attributes);
         $this->manager->persist($merchant);
         $this->manager->flush();
 
         return $merchant;
     }
 
-    public function removeMerchant(Merchant $merchant)
+    public function removeMerchant(Merchant $merchant): void
     {
         $this->manager->remove($merchant);
         $this->manager->flush();
+    }
+
+    /**
+     * @param Merchant $merchant
+     * @param array $attributes
+     */
+    private function attributesSetter(Merchant $merchant, array $attributes)
+    {
+        !array_key_exists('name', $attributes)
+            ? true
+            : $merchant->setName($attributes['name']);
+        !array_key_exists('description', $attributes)
+            ? true
+            : $merchant->setDescription($attributes['description']);
+        !array_key_exists('address', $attributes)
+            ? true
+            : $merchant->setAddress($attributes['address']);
     }
 
     // /**

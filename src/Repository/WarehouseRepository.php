@@ -24,17 +24,14 @@ class WarehouseRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param array $data
+     * @param array $attributes
      * @return Warehouse
      */
-    public function saveWarehouse(array $data): Warehouse
+    public function saveWarehouse(array $attributes): Warehouse
     {
         $warehouse = new Warehouse();
 
-        $warehouse
-            ->setName($data['name'])
-            ->setDescription($data['description'])
-            ->setAddress($data['address']);
+        $this->attributesSetter($warehouse, $attributes);
 
         $this->manager->persist($warehouse);
         $this->manager->flush();
@@ -44,20 +41,39 @@ class WarehouseRepository extends ServiceEntityRepository
 
     /**
      * @param Warehouse $warehouse
+     * @param array     $attributes
      * @return Warehouse
      */
-    public function updateWarehouse(Warehouse $warehouse): Warehouse
+    public function updateWarehouse(Warehouse $warehouse, array $attributes): Warehouse
     {
+        $this->attributesSetter($warehouse, $attributes);
         $this->manager->persist($warehouse);
         $this->manager->flush();
 
         return $warehouse;
     }
 
-    public function removeWarehouse(Warehouse $warehouse)
+    public function removeWarehouse(Warehouse $warehouse): void
     {
         $this->manager->remove($warehouse);
         $this->manager->flush();
+    }
+
+    /**
+     * @param Warehouse $warehouse
+     * @param array $attributes
+     */
+    private function attributesSetter(Warehouse $warehouse, array $attributes)
+    {
+        !array_key_exists('name', $attributes)
+            ? true
+            : $warehouse->setName($attributes['name']);
+        !array_key_exists('description', $attributes)
+            ? true
+            : $warehouse->setDescription($attributes['description']);
+        !array_key_exists('address', $attributes)
+            ? true
+            : $warehouse->setAddress($attributes['address']);
     }
 
     // /**

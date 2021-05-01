@@ -27,7 +27,7 @@ class RegalPositionRepository extends ServiceEntityRepository
      * @param array $data
      * @return RegalPosition
      */
-    public function saveRegalPosition(array $data)
+    public function saveRegalPosition(array $data): RegalPosition
     {
         $regal_position = new RegalPosition();
 

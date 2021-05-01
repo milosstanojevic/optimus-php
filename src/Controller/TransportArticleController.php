@@ -36,7 +36,7 @@ class TransportArticleController extends AbstractController
      * @param int $destination_id
      * @return JsonResponse
      */
-    public function getAll(int $id, int $destination_id)
+    public function getAll(int $id, int $destination_id): JsonResponse
     {
         $transport = $this->transport_route_repository->findOneBy(['id' => $id]);
 
@@ -69,7 +69,7 @@ class TransportArticleController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function add(int $id, int $destination_id, Request $request)
+    public function add(int $id, int $destination_id, Request $request): JsonResponse
     {
         $transport = $this->transport_route_repository->findOneBy(['id' => $id]);
 
@@ -107,7 +107,7 @@ class TransportArticleController extends AbstractController
      * @param int $transport_article_id
      * @return JsonResponse
      */
-    public function delete(int $id, int $destination_id, int $transport_article_id) {
+    public function delete(int $id, int $destination_id, int $transport_article_id): JsonResponse {
         $transport = $this->transport_route_repository->findOneBy(['id' => $id]);
 
         if (!$transport) {
@@ -139,7 +139,7 @@ class TransportArticleController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function update(int $id, int $destination_id, int $transport_article_id, Request $request) {
+    public function update(int $id, int $destination_id, int $transport_article_id, Request $request): JsonResponse {
         $transport = $this->transport_route_repository->findOneBy(['id' => $id]);
 
         if (!$transport) {

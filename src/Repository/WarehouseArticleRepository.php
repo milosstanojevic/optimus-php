@@ -27,7 +27,7 @@ class WarehouseArticleRepository extends ServiceEntityRepository
      * @param int $article_id
      * @return array
      */
-    public function getWarehouseIdsByArticleId(int $article_id)
+    public function getWarehouseIdsByArticleId(int $article_id): array
     {
         $data = [];
         $query = $this
@@ -50,7 +50,7 @@ class WarehouseArticleRepository extends ServiceEntityRepository
      * @param array $data
      * @return WarehouseArticle
      */
-    public function saveWarehouseArticle(array $data)
+    public function saveWarehouseArticle(array $data): WarehouseArticle
     {
         $warehouse_article = new WarehouseArticle();
 

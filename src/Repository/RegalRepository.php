@@ -27,7 +27,7 @@ class RegalRepository extends ServiceEntityRepository
      * @param array $data
      * @return Regal
      */
-    public function saveRegal(array $data)
+    public function saveRegal(array $data): Regal
     {
         $regal = new Regal();
 
