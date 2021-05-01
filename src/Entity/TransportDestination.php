@@ -28,9 +28,14 @@ class TransportDestination
     private $transport_id;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
-    private $warehouse_id;
+    private $parent;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $parent_id;
 
     public function getId(): ?int
     {
@@ -49,14 +54,26 @@ class TransportDestination
         return $this;
     }
 
-    public function getWarehouseId(): ?int
+    public function getParent(): ?string
     {
-        return $this->warehouse_id;
+        return $this->parent;
     }
 
-    public function setWarehouseId(?int $warehouse_id): self
+    public function setParent(string $parent): self
     {
-        $this->warehouse_id = $warehouse_id;
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    public function getParentId(): ?int
+    {
+        return $this->parent_id;
+    }
+
+    public function setParentId(int $parent_id): self
+    {
+        $this->parent_id = $parent_id;
 
         return $this;
     }
@@ -66,7 +83,8 @@ class TransportDestination
         return [
             'id' => $this->getId(),
             'transport_id' => $this->getTransportId(),
-            'warehouse_id' => $this->getWarehouseId(),
+            'parent' => $this->getParent(),
+            'parent_id' => $this->getParentId(),
             'created_by' => $this->getCreatedBy(),
             'updated_by' => $this->getUpdatedBy(),
             'created_at' => $this->getCreatedAt()->getTimestamp(),

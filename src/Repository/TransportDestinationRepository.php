@@ -27,7 +27,8 @@ class TransportDestinationRepository extends ServiceEntityRepository
         $destination = new TransportDestination();
 
         $destination
-            ->setWarehouseId($data['warehouse_id'])
+            ->setParentId($data['parent_id'])
+            ->setParent($data['parent'])
             ->setTransportId($data['transport_id']);
 
         $this->manager->persist($destination);

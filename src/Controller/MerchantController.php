@@ -104,6 +104,6 @@ class MerchantController extends AbstractController
 
         $this->merchant_repository->removeMerchant($merchant);
 
-        return $this->json(['status' => 'Merchant deleted'], Response::HTTP_NO_CONTENT);
+        return $this->json($merchant->toArray(), Response::HTTP_NO_CONTENT);
     }
 }

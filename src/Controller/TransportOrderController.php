@@ -108,6 +108,6 @@ class TransportOrderController extends AbstractController
 
         $this->transport_order_repo->removeTransportOrder($transport_order);
 
-        return $this->json([], Response::HTTP_OK);
+        return $this->json($transport_order->toArray(), Response::HTTP_OK);
     }
 }

@@ -104,6 +104,6 @@ class ArticleController extends AbstractController
 
         $this->article_repository->deleteArticle($article);
 
-        return $this->json([], Response::HTTP_OK);
+        return $this->json($article->toArray(), Response::HTTP_OK);
     }
 }

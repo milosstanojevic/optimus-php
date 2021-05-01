@@ -90,14 +90,15 @@ class TransportDestinationController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         if (
-            empty($data) || !array_key_exists('warehouse_id', $data)
+            empty($data) || !array_key_exists('parent_id', $data)
         ) {
-            throw new UnprocessableEntityHttpException('Warehouse id required');
+            throw new UnprocessableEntityHttpException('Parent id required');
         }
 
         $regal_position = $this->transport_destination_repository->saveTransportDestination([
             'transport_id' => $id,
-            'warehouse_id' => $data['warehouse_id'],
+            'parent_id' => $data['parent_id'],
+            'parent' => $data['parent'],
         ]);
 
         return $this->json($regal_position->toArray(), Response::HTTP_CREATED);

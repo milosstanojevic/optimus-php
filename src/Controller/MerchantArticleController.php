@@ -90,7 +90,7 @@ class MerchantArticleController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function updateMerchantArticles(int $id, int $article_id, Request $request): JsonResponse
+    public function updateMerchantArticle(int $id, int $article_id, Request $request): JsonResponse
     {
         $merchant = $this->merchant_repository->findOneBy(['id' => $id]);
 
@@ -117,7 +117,7 @@ class MerchantArticleController extends AbstractController
      * @param int $article_id
      * @return JsonResponse
      */
-    public function deleteMerchantArticles(int $id, int $article_id): JsonResponse
+    public function deleteMerchantArticle(int $id, int $article_id): JsonResponse
     {
         $merchant = $this->merchant_repository->findOneBy(['id' => $id]);
 
@@ -133,6 +133,6 @@ class MerchantArticleController extends AbstractController
 
         $this->merchant_article_repository->deleteMerchantArticle($merchant_article);
 
-        return $this->json(null, Response::HTTP_NO_CONTENT);
+        return $this->json($merchant_article->toArray(), Response::HTTP_NO_CONTENT);
     }
 }

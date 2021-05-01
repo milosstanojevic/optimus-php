@@ -106,6 +106,6 @@ class WarehouseController extends AbstractController
 
         $this->warehouse_repository->removeWarehouse($warehouse);
 
-        return $this->json(['status' => 'Warehouse deleted'], Response::HTTP_NO_CONTENT);
+        return $this->json($warehouse->toArray(), Response::HTTP_NO_CONTENT);
     }
 }

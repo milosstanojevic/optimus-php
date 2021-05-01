@@ -25,7 +25,7 @@ class TransportArticle
     /**
      * @ORM\Column(type="integer")
      */
-    private $transport_id;
+    private $transport_destination_id;
 
     /**
      * @ORM\Column(type="integer")
@@ -57,14 +57,14 @@ class TransportArticle
         return $this->id;
     }
 
-    public function getTransportId(): ?int
+    public function getTransportDestinationId(): ?int
     {
-        return $this->transport_id;
+        return $this->transport_destination_id;
     }
 
-    public function setTransportId(int $transport_id): self
+    public function setTransportDestinationId(int $transport_destination_id): self
     {
-        $this->transport_id = $transport_id;
+        $this->transport_destination_id = $transport_destination_id;
 
         return $this;
     }
@@ -133,7 +133,7 @@ class TransportArticle
     {
         return [
             'id' => $this->getId(),
-            'transport_id' => $this->getTransportId(),
+            'transport_destination_id' => $this->getTransportDestinationId(),
             'article_id' => $this->getArticleId(),
             'warehouse_id' => $this->getWarehouseId(),
             'regal_id' => $this->getRegalId(),

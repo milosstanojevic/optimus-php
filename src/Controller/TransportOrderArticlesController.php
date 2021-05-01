@@ -27,7 +27,7 @@ class TransportOrderArticlesController extends AbstractController
     }
 
     /**
-     * @Route("/transport-order/{id}/articles", name="transport_order_articles")
+     * @Route("/transport-orders/{id}/articles", name="transport_order_articles")
      * @param int $id
      * @return JsonResponse
      */
@@ -51,7 +51,7 @@ class TransportOrderArticlesController extends AbstractController
     }
 
     /**
-     * @Route("/transport-order/{id}/articles", name="add_transport_order_article", methods={"POST"})
+     * @Route("/transport-orders/{id}/articles", name="add_transport_order_article", methods={"POST"})
      * @param int     $id
      * @param Request $request
      * @return JsonResponse
@@ -78,7 +78,7 @@ class TransportOrderArticlesController extends AbstractController
     }
 
     /**
-     * @Route("/transport-order/{id}/articles/{article_id}", name="edit_transport_order_article", methods={"PUT"})
+     * @Route("/transport-orders/{id}/articles/{article_id}", name="edit_transport_order_article", methods={"PUT"})
      * @param int     $id
      * @param int     $article_id
      * @param Request $request
@@ -108,7 +108,7 @@ class TransportOrderArticlesController extends AbstractController
     }
 
     /**
-     * @Route("/transport-order/{id}/articles/{article_id}", name="edit_transport_order_article", methods={"DELETE"})
+     * @Route("/transport-orders/{id}/articles/{article_id}", name="edit_transport_order_article", methods={"DELETE"})
      * @param int $id
      * @param int $article_id
      * @return JsonResponse
@@ -129,6 +129,6 @@ class TransportOrderArticlesController extends AbstractController
 
         $this->transport_order_articles_repo->deleteTransportOrderArticle($transport_order_article);
 
-        return $this->json(null, Response::HTTP_NO_CONTENT);
+        return $this->json($transport_order_article->toArray(), Response::HTTP_OK);
     }
 }
