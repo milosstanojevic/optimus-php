@@ -21,7 +21,7 @@ class TransportOrderController extends AbstractController
     }
 
     /**
-     * @Route("/transport-orders", name="transport_order")
+     * @Route("/transport-orders", name="transport_order", methods={"GE"})
      */
     public function index(): Response
     {
@@ -36,6 +36,25 @@ class TransportOrderController extends AbstractController
     }
 
     /**
+     * @Route("/transport-orders/{parent}/{id}", name="get_parent_transport_orders", methods={"GET"})
+     * @param string $parent
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function getParentTransportOrders(string $parent, int $id): JsonResponse
+    {
+        $transport_orders = $this->transport_order_repo->findBy(['parent_id' => $id, 'parent' => $parent]);
+
+        $data = [];
+
+        foreach ($transport_orders as $transport_order) {
+            $data[] = $transport_order->toArray();
+        }
+
+        return $this->json($data, Response::HTTP_OK);
+    }
+
+    /**
      * @Route("/transport-orders", name="add_transport_order", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
@@ -44,17 +63,13 @@ class TransportOrderController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if (empty($data) && (!array_key_exists('parent', $data) || !array_key_exists('parent_id', $data))) {
+        if (!empty($data) && (!array_key_exists('parent', $data) || !array_key_exists('parent_id', $data))) {
             throw new UnprocessableEntityHttpException('Destination not set');
         }
 
-        if (empty($data) && !array_key_exists('transport_id', $data)) {
-            throw new UnprocessableEntityHttpException('Transport route not set');
-        }
+        $transport_order = $this->transport_order_repo->saveTransportOrder($data);
 
-        $article = $this->transport_order_repo->saveTransportOrder($data);
-
-        return $this->json($article->toArray(), Response::HTTP_CREATED);
+        return $this->json($transport_order->toArray(), Response::HTTP_CREATED);
     }
 
     /**
