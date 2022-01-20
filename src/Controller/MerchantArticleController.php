@@ -27,8 +27,7 @@ class MerchantArticleController extends AbstractController
     public function __construct(
         MerchantArticleRepository $merchant_article_repository,
         MerchantRepository $merchant_repository
-    )
-    {
+    ) {
         $this->merchant_article_repository = $merchant_article_repository;
         $this->merchant_repository = $merchant_repository;
     }

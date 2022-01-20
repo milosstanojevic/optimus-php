@@ -27,8 +27,7 @@ class WarehouseArticleController extends AbstractController
     public function __construct(
         WarehouseArticleRepository $warehouse_article_repository,
         WarehouseRepository $warehouse_repository
-    )
-    {
+    ) {
         $this->warehouse_article_repository = $warehouse_article_repository;
         $this->warehouse_repository = $warehouse_repository;
     }

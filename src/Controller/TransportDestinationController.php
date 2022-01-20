@@ -20,8 +20,7 @@ class TransportDestinationController extends AbstractController
     public function __construct(
         TransportDestinationRepository $transport_destination_repository,
         TransportRouteRepository $transport_route_repository
-    )
-    {
+    ) {
         $this->transport_destination_repository = $transport_destination_repository;
         $this->transport_route_repository = $transport_route_repository;
     }

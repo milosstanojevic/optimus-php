@@ -32,10 +32,10 @@ class WarehouseArticleRepository extends ServiceEntityRepository
         $warehouse_article = new WarehouseArticle();
 
         $found = $this->findOneBy([
-           'warehouse_id' => $data['warehouse_id'],
-           'article_id' => $data['article_id'],
-           'regal_id' => $data['regal_id'],
-           'regal_position_id' => $data['regal_position_id'],
+            'warehouse_id' => $data['warehouse_id'],
+            'article_id' => $data['article_id'],
+            'regal_id' => $data['regal_id'],
+            'regal_position_id' => $data['regal_position_id'],
         ]);
 
         if ($found) {

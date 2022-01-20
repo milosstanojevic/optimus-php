@@ -20,14 +20,13 @@ class TransportOrderArticlesController extends AbstractController
     public function __construct(
         TransportOrderRepository $transport_order_repo,
         TransportOrderArticleRepository $transport_order_articles_repo
-    )
-    {
+    ) {
         $this->transport_order_repo = $transport_order_repo;
         $this->transport_order_articles_repo = $transport_order_articles_repo;
     }
 
     /**
-     * @Route("/transport-orders/{id}/articles", name="transport_order_articles")
+     * @Route("/transport-orders/{id}/articles", name="transport_order_articles", methods={"GET"})
      * @param int $id
      * @return JsonResponse
      */
@@ -66,7 +65,7 @@ class TransportOrderArticlesController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
-        if (empty($data) && !array_key_exists('article_id', $data)) {
+        if (empty($data) || !array_key_exists('article_id', $data)) {
             throw new UnprocessableEntityHttpException('Article required');
         }
 
@@ -92,7 +91,9 @@ class TransportOrderArticlesController extends AbstractController
             throw new NotFoundHttpException('Transport order not found.');
         }
 
-        $transport_order_article = $this->transport_order_articles_repo->findOneBy(['id' => $article_id]);
+        $transport_order_article = $this
+            ->transport_order_articles_repo
+            ->findOneBy(['id' => $article_id, 'transport_order_id' => $id]);
 
         if (!$transport_order_article) {
             throw new NotFoundHttpException('Transport order article not found.');
@@ -101,7 +102,8 @@ class TransportOrderArticlesController extends AbstractController
         $attributes = json_decode($request->getContent(), true);
 
         $article = $this->transport_order_articles_repo->updateTransportOrderArticle(
-            $transport_order_article, $attributes
+            $transport_order_article,
+            $attributes
         );
 
         return $this->json($article->toArray(), Response::HTTP_OK);
@@ -121,7 +123,9 @@ class TransportOrderArticlesController extends AbstractController
             throw new NotFoundHttpException('Transport order not found.');
         }
 
-        $transport_order_article = $this->transport_order_articles_repo->findOneBy(['id' => $article_id]);
+        $transport_order_article = $this
+            ->transport_order_articles_repo
+            ->findOneBy(['id' => $article_id, 'transport_order_id' => $id]);
 
         if (!$transport_order_article) {
             throw new NotFoundHttpException('Transport order article not found.');

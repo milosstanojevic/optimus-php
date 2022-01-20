@@ -20,8 +20,7 @@ class TransportDestinationArticleController extends AbstractController
     public function __construct(
         TransportDestinationRepository $transport_destination_repository,
         TransportArticleRepository $transport_article_repository
-    )
-    {
+    ) {
         $this->transport_destination_repository = $transport_destination_repository;
         $this->transport_article_repository = $transport_article_repository;
     }
@@ -88,7 +87,8 @@ class TransportDestinationArticleController extends AbstractController
      * @param int $transport_article_id
      * @return JsonResponse
      */
-    public function delete(int $destination_id, int $transport_article_id): JsonResponse {
+    public function delete(int $destination_id, int $transport_article_id): JsonResponse
+    {
 
         $destination = $this->transport_destination_repository->findOneBy(['id' => $destination_id]);
 
@@ -114,7 +114,8 @@ class TransportDestinationArticleController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function update(int $destination_id, int $transport_article_id, Request $request): JsonResponse {
+    public function update(int $destination_id, int $transport_article_id, Request $request): JsonResponse
+    {
         $destination = $this->transport_destination_repository->findOneBy(['id' => $destination_id]);
 
         if (!$destination) {
