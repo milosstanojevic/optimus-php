@@ -100,7 +100,7 @@ class WarehouseArticleController extends AbstractController
     }
 
     /**
-     * @Route("/warehouses/{id}/article", name="add_warehouse_article", methods={"POST"})
+     * @Route("/warehouses/{id}/articles", name="add_warehouse_article", methods={"POST"})
      * @param int     $id
      * @param Request $request
      * @return JsonResponse
