@@ -41,6 +41,22 @@ class RegalPositionRepository extends ServiceEntityRepository
         return $regal_position;
     }
 
+    /**
+     * @param array $ids
+     * @return RegalPosition[] Returns an array of RegalPosition objects
+     */
+    public function findByIds(array $ids)
+    {
+        $entities = $this->findBy(array('id' => $ids));
+        $data = [];
+
+        foreach ($entities as $entity) {
+            $data[] = $entity->toArray();
+        }
+
+        return $data;
+    }
+
     // /**
     //  * @return RegalPosition[] Returns an array of RegalPosition objects
     //  */

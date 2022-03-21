@@ -76,6 +76,22 @@ class WarehouseRepository extends ServiceEntityRepository
             : $warehouse->setAddress($attributes['address']);
     }
 
+    /**
+     * @param array $ids
+     * @return Warehouse[] Returns an array of Warehouse objects
+     */
+    public function findByIds(array $ids)
+    {
+        $entities = $this->findBy(array('id' => $ids));
+        $data = [];
+
+        foreach ($entities as $entity) {
+            $data[] = $entity->toArray();
+        }
+
+        return $data;
+    }
+
     // /**
     //  * @return Warehouse[] Returns an array of Warehouse objects
     //  */

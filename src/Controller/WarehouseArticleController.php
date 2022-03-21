@@ -51,6 +51,45 @@ class WarehouseArticleController extends AbstractController
     }
 
     /**
+     * @Route("/warehouse-article", name="get_warehouse_article_by_params", methods={"GET"})
+     * @return JsonResponse
+     */
+    public function getWarehouseArticleByParams(Request $request): JsonResponse
+    {
+
+        $article_id = $request->query->get('article_id');
+        $warehouse_id = $request->query->get('warehouse_id');
+        $regal_id = $request->query->get('regal_id');
+        $regal_position_id = $request->query->get('regal_position_id');
+
+        if (!$article_id) {
+            throw new NotFoundHttpException('Article ID not provided.');
+        }
+
+        if (!$warehouse_id) {
+            throw new NotFoundHttpException('Warehouse ID not provided.');
+        }
+
+        if (!$regal_id) {
+            throw new NotFoundHttpException('Regal ID not provided.');
+        }
+
+        if (!$regal_position_id) {
+            throw new NotFoundHttpException('Regal Position ID not provided.');
+        }
+
+        $article = $this
+            ->warehouse_article_repository
+            ->findOneBy(['article_id' => $article_id, 'warehouse_id' => $warehouse_id, 'regal_id' => $regal_id, 'regal_position_id' => $regal_position_id]);
+
+        if (!$article) {
+            throw new NotFoundHttpException('Warehouse article not found.');
+        }
+
+        return $this->json($article->toArray(), Response::HTTP_OK);
+    }
+
+    /**
      * @Route("/warehouses/{id}/articles", name="get_warehouse_articles", methods={"GET"})
      * @param int $id
      * @return JsonResponse

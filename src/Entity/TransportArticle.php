@@ -16,16 +16,11 @@ class TransportArticle
     use BlameableEntity;
 
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $transport_destination_id;
 
     /**
      * @ORM\Column(type="integer")
@@ -40,11 +35,6 @@ class TransportArticle
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $quantity;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
     private $regal_id;
 
     /**
@@ -52,21 +42,19 @@ class TransportArticle
      */
     private $regal_position_id;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $transport_order_article_id;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $quantity;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getTransportDestinationId(): ?int
-    {
-        return $this->transport_destination_id;
-    }
-
-    public function setTransportDestinationId(int $transport_destination_id): self
-    {
-        $this->transport_destination_id = $transport_destination_id;
-
-        return $this;
     }
 
     public function getArticleId(): ?int
@@ -89,18 +77,6 @@ class TransportArticle
     public function setWarehouseId(?int $warehouse_id): self
     {
         $this->warehouse_id = $warehouse_id;
-
-        return $this;
-    }
-
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
-
-    public function setQuantity(?int $quantity): self
-    {
-        $this->quantity = $quantity;
 
         return $this;
     }
@@ -129,11 +105,35 @@ class TransportArticle
         return $this;
     }
 
+    public function getTransportOrderArticleId(): ?int
+    {
+        return $this->transport_order_article_id;
+    }
+
+    public function setTransportOrderArticleId(int $transport_order_article_id): self
+    {
+        $this->transport_order_article_id = $transport_order_article_id;
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(?int $quantity): self
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         return [
             'id' => $this->getId(),
-            'transport_destination_id' => $this->getTransportDestinationId(),
+            'transport_order_article_id' => $this->getTransportOrderArticleId(),
             'article_id' => $this->getArticleId(),
             'warehouse_id' => $this->getWarehouseId(),
             'regal_id' => $this->getRegalId(),

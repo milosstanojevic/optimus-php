@@ -4,7 +4,8 @@ namespace App\Repository;
 
 use App\Entity\TransportArticle;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -15,70 +16,89 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TransportArticleRepository extends ServiceEntityRepository
 {
-    private $manager;
-    private $warehouse_article_repository;
-
-    public function __construct(
-        ManagerRegistry $registry,
-        EntityManagerInterface $manager,
-        WarehouseArticleRepository $warehouse_article_repository
-    ) {
+    public function __construct(ManagerRegistry $registry)
+    {
         parent::__construct($registry, TransportArticle::class);
-        $this->manager = $manager;
-        $this->warehouse_article_repository = $warehouse_article_repository;
     }
 
     /**
-     * @param array $data
-     * @return TransportArticle
+     * @param TransportArticle $transport_article
+     * @param array $attributes
      */
-    public function saveTransportArticle(array $data): TransportArticle
+    private function attributesSetter(TransportArticle $transport_order_article, array $attributes)
+    {
+        !array_key_exists('warehouse_id', $attributes)
+            ? true
+            : $transport_order_article->setWarehouseId($attributes['warehouse_id']);
+
+        !array_key_exists('article_id', $attributes)
+            ? true
+            : $transport_order_article->setArticleId($attributes['article_id']);
+
+        !array_key_exists('transport_order_article_id', $attributes)
+            ? true
+            : $transport_order_article->setTransportOrderArticleId($attributes['transport_order_article_id']);
+
+        !array_key_exists('warehouse_id', $attributes)
+            ? true
+            : $transport_order_article->setWarehouseId($attributes['warehouse_id']);
+
+        !array_key_exists('regal_id', $attributes)
+            ? true
+            : $transport_order_article->setRegalId($attributes['regal_id']);
+
+        !array_key_exists('regal_position_id', $attributes)
+            ? true
+            : $transport_order_article->setRegalPositionId($attributes['regal_position_id']);
+
+        !array_key_exists('quantity', $attributes)
+            ? true
+            : $transport_order_article->setQuantity($attributes['quantity']);
+    }
+
+    public function saveTransportArticle(array $attributes): TransportArticle
     {
         $transport_article = new TransportArticle();
 
-        $this->dataSetter($transport_article, $data);
+        $this->attributesSetter($transport_article, $attributes);
 
-        $this->manager->persist($transport_article);
-        $this->manager->flush();
-
-        return $transport_article;
-    }
-
-    /**
-     * @param TransportArticle $transport_article
-     */
-    public function deleteTransportArticle(TransportArticle $transport_article): void
-    {
-        $this->manager->remove($transport_article);
-        $this->manager->flush();
-    }
-
-    /**
-     * @param TransportArticle $transport_article
-     * @param array            $data
-     * @return TransportArticle
-     */
-    public function updateTransportArticle(TransportArticle $transport_article, array $data): TransportArticle
-    {
-        $this->dataSetter($transport_article, $data);
-        $this->manager->persist($transport_article);
-        $this->manager->flush();
+        $this->_em->persist($transport_article);
+        $this->_em->flush();
 
         return $transport_article;
     }
 
     /**
-     * @param TransportArticle $transport_article
-     * @param array            $data
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
-    private function dataSetter(TransportArticle $transport_article, array $data)
+    public function add(TransportArticle $entity, bool $flush = true): void
     {
-        !array_key_exists('transport_destination_id', $data) ? true : $transport_article->setTransportDestinationId($data['transport_destination_id']);
-        !array_key_exists('article_id', $data) ? true : $transport_article->setArticleId($data['article_id']);
-        !array_key_exists('warehouse_id', $data) ? true : $transport_article->setWarehouseId($data['warehouse_id']);
-        !array_key_exists('regal_id', $data) ? true : $transport_article->setRegalId($data['regal_id']);
-        !array_key_exists('regal_position_id', $data) ? true : $transport_article->setRegalPositionId($data['regal_position_id']);
-        !array_key_exists('quantity', $data) ? true : $transport_article->setQuantity($data['quantity']);
+        $this->_em->persist($entity);
+        if ($flush) {
+            $this->_em->flush();
+        }
+    }
+
+    public function updateTransportArticle(
+        TransportArticle $transport_article,
+        array $attributes
+    ): TransportArticle {
+        $this->attributesSetter($transport_article, $attributes);
+        $this->_em->persist($transport_article);
+        $this->_em->flush();
+
+        return $transport_article;
+    }
+
+    public function remove(TransportArticle $entity, bool $flush = true): TransportArticle
+    {
+        $this->_em->remove($entity);
+        if ($flush) {
+            $this->_em->flush();
+        }
+
+        return $entity;
     }
 
     // /**

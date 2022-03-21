@@ -33,6 +33,11 @@ class TransportOrder
     private $parent_id;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $status;
+
+    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private $transport_id;
@@ -66,6 +71,18 @@ class TransportOrder
         return $this;
     }
 
+    public function getStatus(): ?int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
     public function getTransportId(): ?int
     {
         return $this->transport_id;
@@ -84,6 +101,7 @@ class TransportOrder
             'id' => $this->getId(),
             'parent' => $this->getParent(),
             'parent_id' => $this->getParentId(),
+            'status' => $this->getStatus(),
             'transport_id' => $this->getTransportId(),
             'created_by' => $this->getCreatedBy(),
             'updated_by' => $this->getUpdatedBy(),

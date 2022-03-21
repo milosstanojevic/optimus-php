@@ -41,6 +41,22 @@ class RegalRepository extends ServiceEntityRepository
         return $regal;
     }
 
+    /**
+     * @param array $ids
+     * @return Regal[] Returns an array of Regal objects
+     */
+    public function findByIds(array $ids)
+    {
+        $entities = $this->findBy(array('id' => $ids));
+        $data = [];
+
+        foreach ($entities as $entity) {
+            $data[] = $entity->toArray();
+        }
+
+        return $data;
+    }
+
     // /**
     //  * @return Regal[] Returns an array of Regal objects
     //  */

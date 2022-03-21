@@ -35,7 +35,17 @@ class TransportOrderArticle
     /**
      * @ORM\Column(type="integer")
      */
-    private $quantity;
+    private $requested_quantity;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $transport_quantity;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $reason;
 
     public function getId(): ?int
     {
@@ -66,14 +76,39 @@ class TransportOrderArticle
         return $this;
     }
 
-    public function getQuantity(): ?int
+    public function getRequestedQuantity(): ?int
     {
-        return $this->quantity;
+        return $this->requested_quantity;
     }
 
-    public function setQuantity(int $quantity): self
+    public function setRequestedQuantity(int $requested_quantity): self
     {
-        $this->quantity = $quantity;
+        $this->requested_quantity = $requested_quantity;
+
+        return $this;
+    }
+
+
+    public function getTransportQuantity(): ?int
+    {
+        return $this->transport_quantity;
+    }
+
+    public function setTransportQuantity(?int $transport_quantity): self
+    {
+        $this->transport_quantity = $transport_quantity;
+
+        return $this;
+    }
+
+    public function getReason(): ?string
+    {
+        return $this->reason;
+    }
+
+    public function setReason(?string $reason): self
+    {
+        $this->reason = $reason;
 
         return $this;
     }
@@ -84,7 +119,9 @@ class TransportOrderArticle
             'id' => $this->getId(),
             'transport_order_id' => $this->getTransportOrderId(),
             'article_id' => $this->getArticleId(),
-            'quantity' => $this->getQuantity(),
+            'requested_quantity' => $this->getRequestedQuantity(),
+            'transport_quantity' => $this->getTransportQuantity(),
+            'reason' => $this->getReason(),
             'created_by' => $this->getCreatedBy(),
             'updated_by' => $this->getUpdatedBy(),
             'created_at' => $this->getCreatedAt()->getTimestamp(),

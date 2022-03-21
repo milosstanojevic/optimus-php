@@ -21,7 +21,7 @@ class TransportOrderController extends AbstractController
     }
 
     /**
-     * @Route("/transport-orders", name="transport_order", methods={"GE"})
+     * @Route("/transport-orders", name="get_all_transport_orders", methods={"GET"})
      */
     public function index(): Response
     {

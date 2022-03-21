@@ -38,8 +38,7 @@ class TransportOrderArticleRepository extends ServiceEntityRepository
     public function updateTransportOrderArticle(
         TransportOrderArticle $transport_order_article,
         array $attributes
-    ): TransportOrderArticle
-    {
+    ): TransportOrderArticle {
         $this->attributesSetter($transport_order_article, $attributes);
         $this->manager->persist($transport_order_article);
         $this->manager->flush();
@@ -62,13 +61,22 @@ class TransportOrderArticleRepository extends ServiceEntityRepository
         !array_key_exists('transport_order_id', $attributes)
             ? true
             : $transport_order_article->setTransportOrderId($attributes['transport_order_id']);
+
         !array_key_exists('article_id', $attributes)
             ? true
             : $transport_order_article->setArticleId($attributes['article_id']);
-        !array_key_exists('quantity', $attributes)
-            ? true
-            : $transport_order_article->setQuantity($attributes['quantity']);
 
+        !array_key_exists('requested_quantity', $attributes)
+            ? true
+            : $transport_order_article->setRequestedQuantity($attributes['requested_quantity']);
+
+        !array_key_exists('transport_quantity', $attributes)
+            ? true
+            : $transport_order_article->setTransportQuantity($attributes['transport_quantity']);
+
+        !array_key_exists('reason', $attributes)
+            ? true
+            : $transport_order_article->setReason($attributes['reason']);
     }
     // /**
     //  * @return TransportOrderArticle[] Returns an array of TransportOrderArticle objects
