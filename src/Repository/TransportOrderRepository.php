@@ -48,8 +48,8 @@ class TransportOrderRepository extends ServiceEntityRepository
     {
         empty($attributes['parent']) ? true : $transport_order->setParent($attributes['parent']);
         empty($attributes['parent_id']) ? true : $transport_order->setParentId($attributes['parent_id']);
-        empty($attributes['transport_id']) ? true : $transport_order->setTransportId($attributes['transport_id']);
         empty($attributes['status']) ? true : $transport_order->setStatus($attributes['status']);
+        $transport_order->setTransportId($attributes['transport_id']);
 
         $this->manager->persist($transport_order);
         $this->manager->flush();
