@@ -37,11 +37,6 @@ class MerchantArticle
      */
     private $quantity;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $warehouse_id;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -83,25 +78,12 @@ class MerchantArticle
         return $this;
     }
 
-    public function getWarehouseId(): ?int
-    {
-        return $this->warehouse_id;
-    }
-
-    public function setWarehouseId(int $warehouse_id): self
-    {
-        $this->warehouse_id = $warehouse_id;
-
-        return $this;
-    }
-
     public function toArray(): array
     {
         return [
             'id' => $this->getId(),
             'merchant_id' => $this->getMerchantId(),
             'article_id' => $this->getArticleId(),
-            'warehouse_id' => $this->getWarehouseId(),
             'quantity' => $this->getQuantity(),
             'created_by' => $this->getCreatedBy(),
             'updated_by' => $this->getUpdatedBy(),

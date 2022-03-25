@@ -46,6 +46,25 @@ class TransportOrderArticleRepository extends ServiceEntityRepository
         return $transport_order_article;
     }
 
+    public function addTransportOrderQuantity(TransportOrderArticle $transport_order_article, int $quantity): TransportOrderArticle
+    {
+        $qty = $transport_order_article->getTransportQuantity() || 0;
+        $attributes = [
+            'transport_quantity' => $qty + $quantity
+        ];
+
+        return $this->updateTransportOrderArticle($transport_order_article, $attributes);
+    }
+
+    public function removeTransportOrderQuantity(TransportOrderArticle $transport_order_article, int $quantity): TransportOrderArticle
+    {
+        $qty = $transport_order_article->getTransportQuantity() || 0;
+        $attributes = [
+            'transport_quantity' => $qty - $quantity
+        ];
+        return $this->updateTransportOrderArticle($transport_order_article, $attributes);
+    }
+
     public function deleteTransportOrderArticle(TransportOrderArticle $transport_order_article): void
     {
         $this->manager->remove($transport_order_article);

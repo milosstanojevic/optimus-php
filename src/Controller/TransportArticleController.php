@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\RegalPositionRepository;
+use App\Repository\WarehouseArticleRepository;
 use App\Repository\RegalRepository;
 use App\Repository\TransportArticleRepository;
 use App\Repository\TransportOrderArticleRepository;
@@ -42,18 +43,25 @@ class TransportArticleController extends AbstractController
      */
     private $regal_p_repo;
 
+    /**
+     * @var WarehouseArticleRepository
+     */
+    private $warehouse_article_repo;
+
     public function __construct(
         TransportArticleRepository $transport_article_repository,
         TransportOrderArticleRepository $transport_order_article_repository,
         WarehouseRepository $warehouse_repo,
         RegalRepository $regal_repo,
-        RegalPositionRepository $regal_p_repo
+        RegalPositionRepository $regal_p_repo,
+        WarehouseArticleRepository $warehouse_article_repo
     ) {
         $this->transport_article_repository = $transport_article_repository;
         $this->transport_order_article_repository = $transport_order_article_repository;
         $this->warehouse_repo = $warehouse_repo;
         $this->regal_repo = $regal_repo;
         $this->regal_p_repo = $regal_p_repo;
+        $this->warehouse_article_repo = $warehouse_article_repo;
     }
     /**
      * @Route("/transport-order-articles/{id}/articles", name="get_transport_articles", methods={"GET"})
@@ -132,13 +140,34 @@ class TransportArticleController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
-        if (empty($data) && !array_key_exists('article_id', $data)) {
+        if (empty($data) || !array_key_exists('article_id', $data)) {
             throw new UnprocessableEntityHttpException('Article required');
+        }
+
+        if (!array_key_exists('quantity', $data) || $data['quantity'] === 0) {
+            throw new UnprocessableEntityHttpException('Quantity required');
         }
 
         $article = $this->transport_article_repository->saveTransportArticle(
             array_merge($data, ['transport_order_article_id' => $id])
         );
+
+        $this
+            ->transport_order_article_repository
+            ->addTransportOrderQuantity($transport_order_article, $data['quantity']);
+
+        $warehouse_article = $this->warehouse_article_repo->findOneBy([
+            'warehouse_id' => $article->getWarehouseId(),
+            'article_id' => $article->getArticleId(),
+            'regal_id' => $article->getRegalId(),
+            'regal_position_id' => $article->getRegalPositionId()
+        ]);
+        var_dump($warehouse_article->toArray());
+        if ($warehouse_article) {
+            $qty = $warehouse_article->getQuantity();
+            $warehouse_article->setQuantity($qty >= $data['quantity'] ? $qty - $data['quantity'] : $qty);
+            $this->warehouse_article_repo->updateWarehouseArticle($warehouse_article);
+        }
 
         return $this->json($article->toArray(), Response::HTTP_CREATED);
     }
@@ -192,6 +221,23 @@ class TransportArticleController extends AbstractController
         }
 
         $this->transport_article_repository->remove($transport_article);
+        $this
+            ->transport_order_article_repository
+            ->removeTransportOrderQuantity($transport_order_article, $transport_article->getQuantity());
+
+        $warehouse_article = $this->warehouse_article_repo->findOneBy([
+            'warehouse_id' => $transport_article->getWarehouseId(),
+            'article_id' => $transport_article->getArticleId(),
+            'regal_id' => $transport_article->getRegalId(),
+            'regal_position_id' => $transport_article->getRegalPositionId()
+        ]);
+
+        if ($warehouse_article) {
+            $transport_article_qty = $transport_article->getQuantity();
+            $qty = $warehouse_article->getQuantity();
+            $warehouse_article->setQuantity($qty ? $qty + $transport_article_qty : $transport_article_qty);
+            $this->warehouse_article_repo->updateWarehouseArticle($warehouse_article);
+        }
 
         return $this->json($transport_article->toArray(), Response::HTTP_NO_CONTENT);
     }
