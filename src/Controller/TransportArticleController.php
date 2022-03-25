@@ -162,7 +162,7 @@ class TransportArticleController extends AbstractController
             'regal_id' => $article->getRegalId(),
             'regal_position_id' => $article->getRegalPositionId()
         ]);
-        var_dump($warehouse_article->toArray());
+
         if ($warehouse_article) {
             $qty = $warehouse_article->getQuantity();
             $warehouse_article->setQuantity($qty >= $data['quantity'] ? $qty - $data['quantity'] : $qty);

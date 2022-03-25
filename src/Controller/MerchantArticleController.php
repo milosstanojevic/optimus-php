@@ -61,7 +61,7 @@ class MerchantArticleController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function saveMerchantArticles(int $id, Request $request): JsonResponse
+    public function saveMerchantArticle(int $id, Request $request): JsonResponse
     {
         $merchant = $this->merchant_repository->findOneBy(['id' => $id]);
 
@@ -71,8 +71,23 @@ class MerchantArticleController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
-        if (empty($data) && !array_key_exists('article_id', $data)) {
+        if (empty($data) || !array_key_exists('article_id', $data)) {
             throw new UnprocessableEntityHttpException('Article required');
+        }
+
+        if (!array_key_exists('quantity', $data)) {
+            throw new UnprocessableEntityHttpException('Quantity required');
+        }
+
+        $existing_article = $this->merchant_article_repository->findOneBy(['article_id' => $data['article_id']]);
+
+        if ($existing_article) {
+            $merchant_article_qty = $existing_article->getQuantity();
+            $qty = $merchant_article_qty ? $merchant_article_qty + $data['quantity'] : $data['quantity'];
+            $article = $this
+                ->merchant_article_repository
+                ->updateMerchantArticle($existing_article, ['quantity' => $qty]);
+            return $this->json($article->toArray(), Response::HTTP_OK);
         }
 
         $article = $this->merchant_article_repository->saveMerchantArticle(

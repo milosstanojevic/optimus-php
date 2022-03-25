@@ -43,6 +43,11 @@ class TransportOrderArticle
     private $transport_quantity;
 
     /**
+     * @ORM\Column(type="integer", options={"default": 1})
+     */
+    private $status;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $reason;
@@ -101,6 +106,18 @@ class TransportOrderArticle
         return $this;
     }
 
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
     public function getReason(): ?string
     {
         return $this->reason;
@@ -122,6 +139,7 @@ class TransportOrderArticle
             'requested_quantity' => $this->getRequestedQuantity(),
             'transport_quantity' => $this->getTransportQuantity(),
             'reason' => $this->getReason(),
+            'status' => $this->getStatus(),
             'created_by' => $this->getCreatedBy(),
             'updated_by' => $this->getUpdatedBy(),
             'created_at' => $this->getCreatedAt()->getTimestamp(),

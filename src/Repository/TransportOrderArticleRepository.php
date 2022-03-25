@@ -48,7 +48,8 @@ class TransportOrderArticleRepository extends ServiceEntityRepository
 
     public function addTransportOrderQuantity(TransportOrderArticle $transport_order_article, int $quantity): TransportOrderArticle
     {
-        $qty = $transport_order_article->getTransportQuantity() || 0;
+        $transport_qty = $transport_order_article->getTransportQuantity();
+        $qty = is_null($transport_qty) ? 0 : $transport_qty;
         $attributes = [
             'transport_quantity' => $qty + $quantity
         ];
@@ -58,7 +59,8 @@ class TransportOrderArticleRepository extends ServiceEntityRepository
 
     public function removeTransportOrderQuantity(TransportOrderArticle $transport_order_article, int $quantity): TransportOrderArticle
     {
-        $qty = $transport_order_article->getTransportQuantity() || 0;
+        $transport_qty = $transport_order_article->getTransportQuantity();
+        $qty = $qty = is_null($transport_qty) ? 0 : $transport_qty;
         $attributes = [
             'transport_quantity' => $qty - $quantity
         ];
@@ -96,6 +98,8 @@ class TransportOrderArticleRepository extends ServiceEntityRepository
         !array_key_exists('reason', $attributes)
             ? true
             : $transport_order_article->setReason($attributes['reason']);
+
+        $transport_order_article->setStatus(array_key_exists('status', $attributes) ? $attributes['status'] : 1);
     }
     // /**
     //  * @return TransportOrderArticle[] Returns an array of TransportOrderArticle objects

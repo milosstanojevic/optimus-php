@@ -110,7 +110,7 @@ class TransportOrderArticlesController extends AbstractController
     }
 
     /**
-     * @Route("/transport-orders/{id}/articles/{article_id}", name="edit_transport_order_article", methods={"DELETE"})
+     * @Route("/transport-orders/{id}/articles/{article_id}", name="delete_transport_order_article", methods={"DELETE"})
      * @param int $id
      * @param int $article_id
      * @return JsonResponse
